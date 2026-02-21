@@ -5,7 +5,7 @@ import {
   validateINNWithKPP,
   ValidationErrorCodes,
   ValidationErrorMessages,
-} from "../../src/core/innValidator";
+} from "../src/core/innValidator";
 
 describe("innValidator - Базовая валидация", () => {
   // ========== ТЕСТЫ НА ПУСТЫЕ ЗНАЧЕНИЯ ==========

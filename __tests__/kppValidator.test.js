@@ -1,4 +1,4 @@
-import { validateKPP } from "../../src/core/innValidator";
+import { validateKPP } from "../src/core/innValidator";
 
 describe("kppValidator - Валидация КПП", () => {
   // ========== ТЕСТЫ НА ПУСТЫЕ ЗНАЧЕНИЯ ==========

@@ -3,9 +3,9 @@ import {
   validateINN,
   validateINNForUI,
   validateINNWithKPP,
-} from "../../src/core/innValidator";
-import { formValidationMixin } from "../../src/mixins/formValidationMixin";
-import { inputValidationMixin } from "../../src/mixins/inputValidationMixin";
+} from "../src/core/innValidator";
+import { formValidationMixin } from "../src/mixins/formValidationMixin";
+import { inputValidationMixin } from "../src/mixins/inputValidationMixin";
 
 describe("Интеграция: Полный поток валидации", () => {
   test("ядро + миксины должны работать вместе", () => {
