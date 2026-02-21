@@ -120,9 +120,9 @@ export const inputValidationMixin = {
      * Валидация КПП
      * @private
      */
-    _validateKPP(value) {
-      // Динамический импорт для минимизации бандла
-      import("../core/innValidator").then(({ validateKPP }) => {
+    async _validateKPP(value) {
+      try {
+        const { validateKPP } = await import("../core/innValidator");
         const validation = validateKPP(value);
 
         this.inputState.isValid = validation.isValid;
@@ -130,7 +130,10 @@ export const inputValidationMixin = {
 
         this._emitValidation(validation.isValid, value, validation);
         return validation;
-      });
+      } catch (error) {
+        console.error("Error validating KPP:", error);
+        return { isValid: false, errorMessage: "Ошибка валидации" };
+      }
     },
 
     /**
