@@ -66,7 +66,7 @@ describe("inputValidationMixin", () => {
 
       // Асинхронная валидация КПП
       await wrapper.vm.validate("770701001");
-
+      await wrapper.vm.$nextTick();
       expect(wrapper.vm.inputState.isValid).toBe(true);
     });
 
