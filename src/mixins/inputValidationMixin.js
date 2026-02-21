@@ -79,7 +79,7 @@ export const inputValidationMixin = {
       this.inputState.value = value;
       this.inputState.isDirty = true;
 
-      if (this.validationType === "none") {
+      if (this.validationType === "none" || !this.validationType) {
         this.inputState.isValid = true;
         this.inputState.errorMessage = "";
         this._emitValidation(true, value);
