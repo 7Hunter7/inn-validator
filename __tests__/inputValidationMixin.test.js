@@ -87,11 +87,12 @@ describe("inputValidationMixin", () => {
       expect(wrapper.vm.inputState.value).toBe("7707083893");
     });
 
-    test("должен валидировать если validateOnInput = true", () => {
+    test("должен валидировать если validateOnInput = true", async () => {
       wrapper.setProps({
         validationType: "inn",
         validateOnInput: true,
       });
+      await wrapper.vm.$nextTick();
 
       const validateSpy = jest.spyOn(wrapper.vm, "validate");
       const event = { target: { value: "7707083893" } };
