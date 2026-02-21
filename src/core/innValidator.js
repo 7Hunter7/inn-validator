@@ -276,11 +276,6 @@ export const validateKPP = (kpp) => {
     };
   }
 
-  // Проверка второй части (цифры или буквы A-Z)
-  if (!/^[0-9A-Z]{2}$/.test(secondPart)) {
-    return { isValid: false, errorMessage: "Неверный формат КПП" };
-  }
-
   // Проверка третьей части (только цифры)
   if (!/^\d{3}$/.test(thirdPart)) {
     return {
@@ -289,7 +284,15 @@ export const validateKPP = (kpp) => {
     };
   }
 
-  // Проверка причины постановки (PP) - теперь с поддержкой 00
+  // Проверка второй части (цифры или буквы A-Z)
+  if (!/^[0-9A-Z]{2}$/.test(secondPart)) {
+    return {
+      isValid: false,
+      errorMessage: "Неверный формат КПП", // для PP=00
+    };
+  }
+
+  // Проверка причины постановки (PP)
   const ppNum = parseInt(secondPart, 10);
 
   // Если PP - это буквы, то всегда валидно
@@ -297,14 +300,14 @@ export const validateKPP = (kpp) => {
     return { isValid: true, errorMessage: "" };
   }
 
-  // Если PP - цифры, проверяем диапазон
-  if (ppNum === 0 || (ppNum >= 1 && ppNum <= 99)) {
+  // Если PP - цифры, проверяем диапазон 01-99 (00 - недопустимо!)
+  if (ppNum >= 1 && ppNum <= 99) {
     return { isValid: true, errorMessage: "" };
   }
 
   return {
     isValid: false,
-    errorMessage: "Неверный код причины постановки на учет",
+    errorMessage: "Неверный код причины постановки на учет", // для PP=00
   };
 };
 
