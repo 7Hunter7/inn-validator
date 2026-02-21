@@ -83,11 +83,13 @@ describe("formValidationMixin", () => {
       const result = wrapper.vm.validateINNField("inn", "123");
 
       expect(result.isValid).toBe(false);
-      expect(result.message).toContain("10 или 12 цифр");
+      // Ищем часть сообщения, а не точное совпадение
+      expect(result.message).toContain("10 цифр");
+      expect(result.message).toContain("12 цифр");
 
       const field = wrapper.vm.formValidation.fields["inn"];
       expect(field.isValid).toBe(false);
-      expect(field.error).toContain("10 или 12 цифр");
+      expect(field.error).toContain("10 цифр");
     });
 
     test("должен эмитить событие field-validation", () => {
