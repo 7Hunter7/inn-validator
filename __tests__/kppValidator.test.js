@@ -70,7 +70,12 @@ describe("kppValidator - Валидация КПП", () => {
       ({ kpp }) => {
         const result = validateKPP(kpp);
         expect(result.isValid).toBe(false);
-        expect(result.errorMessage).toBe("Неверный формат КПП");
+        // Для дефиса длина становится 10, так что сообщение о длине
+        if (kpp.includes("-")) {
+          expect(result.errorMessage).toBe("КПП должен содержать 9 знаков");
+        } else {
+          expect(result.errorMessage).toBe("Неверный формат КПП");
+        }
       },
     );
   });
