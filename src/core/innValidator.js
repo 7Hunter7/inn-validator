@@ -55,6 +55,7 @@ const FOREIGN_ORG_PREFIXES = new Set(["99"]); // 99 - зарезервирова
  * @param {string} inn - ИНН для проверки
  * @returns {boolean} - true если контрольное число верно
  */
+// Для 10-значного ИНН
 const validateChecksum = (inn) => {
   if (inn.length === 10) {
     const coefficients = [2, 4, 10, 3, 5, 9, 4, 6, 8];
@@ -66,7 +67,10 @@ const validateChecksum = (inn) => {
 
     const controlDigit = (sum % 11) % 10;
     return controlDigit === parseInt(inn[9], 10);
-  } else if (inn.length === 12) {
+  }
+
+  // Для 12-значного ИНН
+  else if (inn.length === 12) {
     const coefficients1 = [7, 2, 4, 10, 3, 5, 9, 4, 6, 8];
     let sum1 = 0;
 
@@ -200,29 +204,34 @@ export const validateINN = (inn, options = {}) => {
   result.details.type = strInn.length === 10 ? "organization" : "individual";
 
   // 5. Проверка структуры (NNYY)
+  // 5.1 Проверяем структуру
   if (validateStruct && strInn.length >= 4) {
     const structCheck = validateStructure(strInn);
-
     result.details.isForeignOrg = structCheck.isForeign;
     result.details.regionCode = structCheck.details.nn;
     result.details.yyIndex = structCheck.details.yy;
-
     // Новый формат: ИНН с валидным YY считаем новыми
     result.details.isNewFormat = structCheck.details.yy >= 0;
 
     if (!structCheck.isValid) {
       result.errorCode = structCheck.errorCode;
       result.errorMessage = ValidationErrorMessages[structCheck.errorCode];
-
-      // Если это иностранная организация и они запрещены - особая ошибка
-      if (structCheck.isForeign && !allowForeignOrgs) {
-        result.errorCode = ValidationErrorCodes.FOREIGN_ORG_INVALID;
-        result.errorMessage =
-          ValidationErrorMessages[ValidationErrorCodes.FOREIGN_ORG_INVALID];
-      }
-
       return result;
     }
+  }
+  // 5.2 Проверяем контрольное число
+  if (!validateChecksum(strInn)) {
+    result.errorCode = ValidationErrorCodes.INVALID_CHECKSUM;
+    result.errorMessage =
+      ValidationErrorMessages[ValidationErrorCodes.INVALID_CHECKSUM];
+    return result;
+  }
+  // 5.3 Проверяем разрешены ли иностранные
+  if (result.details.isForeignOrg && !allowForeignOrgs) {
+    result.errorCode = ValidationErrorCodes.FOREIGN_ORG_INVALID;
+    result.errorMessage =
+      ValidationErrorMessages[ValidationErrorCodes.FOREIGN_ORG_INVALID];
+    return result;
   }
 
   // 6. Проверка контрольного числа (алгоритм не изменился)
