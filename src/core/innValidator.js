@@ -108,7 +108,7 @@ const validateStructure = (inn) => {
       isValid: true, // Специальный индекс ФНС для иностранных
       errorCode: null,
       isForeign: true,
-      details: { nn: prefix, yy },
+      details: { nn: parseInt(prefix, 10), yy },
     };
   }
 
@@ -118,7 +118,7 @@ const validateStructure = (inn) => {
       isValid: false,
       errorCode: ValidationErrorCodes.INVALID_REGION_CODE,
       isForeign: false,
-      details: { nn: prefix, yy },
+      details: { nn: parseInt(prefix, 10), yy },
     };
   }
 
@@ -130,7 +130,7 @@ const validateStructure = (inn) => {
       isValid: false,
       errorCode: ValidationErrorCodes.INVALID_YY_INDEX,
       isForeign: false,
-      details: { nn: prefix, yy },
+      details: { nn: parseInt(prefix, 10), yy },
     };
   }
 
@@ -265,8 +265,8 @@ export const validateKPP = (kpp) => {
   const ppNum = parseInt(pp, 10);
 
   // Для российских: 01-50, для иностранных: 50-99
-  if (ppNum >= 1 && ppNum <= 50) {
-    // Российская организация
+  if (ppNum === 0 || (ppNum >= 1 && ppNum <= 50)) {
+    // Российская организация (включая 00)
   } else if (ppNum >= 50 && ppNum <= 99) {
     // Иностранная организация
   } else if (isNaN(ppNum)) {
