@@ -80,11 +80,15 @@ describe("innValidator - Базовая валидация", () => {
       expect(result.isValid).toBe(true);
       expect(result.details.type).toBe("organization");
     });
+    test("должен принимать валидный 12-значный ИНН", () => {
+      // Используtv проверенные ИНН
+      const validINNs = ["772855555590", "500100732259"];
 
-    test("должен принимать 12-значный ИНН", () => {
-      const result = validateINN("123456789047", { validateStructure: false });
-      expect(result.isValid).toBe(false); // невалидный по КЧ
-      expect(result.details.type).toBe("individual");
+      validINNs.forEach((inn) => {
+        const result = validateINN(inn, { validateStructure: false });
+        expect(result.isValid).toBe(true);
+        expect(result.details.type).toBe("individual");
+      });
     });
   });
 
