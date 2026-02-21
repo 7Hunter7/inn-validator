@@ -248,8 +248,11 @@ describe("innValidator - validateINNLegacy", () => {
   });
 
   test("должен проверять только длину и КЧ", () => {
-    const result = validateINNLegacy("0007083893");
-    expect(result.isValid).toBe(true); // КЧ совпадает, структура не проверяется
+    // Используем реальный валидный ИНН: 7707083893
+    const result = validateINNLegacy("7707083893");
+    expect(result.isValid).toBe(true);
+    // Этот ИНН должен проходить проверку КЧ
+    expect(result.errorMessage).toBe("");
   });
 });
 
