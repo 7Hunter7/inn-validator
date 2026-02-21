@@ -1,5 +1,5 @@
 import { mount } from "@vue/test-utils";
-import { inputValidationMixin } from "../../src/vue/inputValidationMixin";
+import { inputValidationMixin } from "../../src/mixins/inputValidationMixin";
 
 describe("inputValidationMixin", () => {
   let wrapper;
