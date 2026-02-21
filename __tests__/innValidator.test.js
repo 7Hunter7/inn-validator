@@ -90,6 +90,13 @@ describe("innValidator - Базовая валидация", () => {
         expect(result.details.type).toBe("individual");
       });
     });
+
+    test("должен отклонять невалидный 12-значный ИНН", () => {
+      const invalidINN = "123456789047"; // Заведомо невалидный
+      const result = validateINN(invalidINN, { validateStructure: false });
+      expect(result.isValid).toBe(false);
+      expect(result.errorCode).toBe(ValidationErrorCodes.INVALID_CHECKSUM);
+    });
   });
 
   // ========== ТЕСТЫ НА СТРУКТУРУ (NNYY) ==========
