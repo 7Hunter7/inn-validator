@@ -43,13 +43,6 @@ package-lock.json
 yarn.lock
 pnpm-lock.yaml
 
-# Test files
-__tests__/
-test/
-*.test.js
-*.spec.js
-coverage/
-
 # Build outputs
 lib/
 dist/
