@@ -38,13 +38,15 @@ describe("inputValidationMixin", () => {
       expect(wrapper.props().validationType).toBe("inn");
     });
 
-    test("должен принимать fieldLabel", () => {
+    test("должен принимать fieldLabel", async () => {
       wrapper.setProps({ fieldLabel: "ИНН организации" });
+      await wrapper.vm.$nextTick();
       expect(wrapper.props().fieldLabel).toBe("ИНН организации");
     });
 
-    test("должен принимать validateOnInput", () => {
+    test("должен принимать validateOnInput", async () => {
       wrapper.setProps({ validateOnInput: true });
+      await wrapper.vm.$nextTick();
       expect(wrapper.props().validateOnInput).toBe(true);
     });
   });
