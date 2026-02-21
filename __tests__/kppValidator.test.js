@@ -58,26 +58,50 @@ describe("kppValidator - Валидация КПП", () => {
     });
 
     const invalidFormats = [
-      { kpp: "7707A1001", error: "буква не на месте" },
-      { kpp: "A70701001", error: "буква в первой части" },
-      { kpp: "77070100A", error: "буква в конце" },
-      { kpp: "7707-01001", error: "дефис" },
-      { kpp: "77 701001", error: "пробел" },
+      {
+        kpp: "7707A1001",
+        error: "буква не на месте",
+        expectedMessage: "Первые 4 символа должны быть цифрами",
+      },
+      {
+        kpp: "A70701001",
+        error: "буква в первой части",
+        expectedMessage: "Первые 4 символа должны быть цифрами",
+      },
+      {
+        kpp: "77070100A",
+        error: "буква в конце",
+        expectedMessage: "Последние 3 символа должны быть цифрами",
+      },
+      {
+        kpp: "7707-01001",
+        error: "дефис",
+        expectedMessage: "КПП должен содержать 9 знаков",
+      },
+      {
+        kpp: "77 701001",
+        error: "пробел",
+        expectedMessage: "Первые 4 символа должны быть цифрами",
+      },
     ];
 
     test.each(invalidFormats)(
       "должен отклонять неверный формат: $error",
-      ({ kpp }) => {
+      ({ kpp, expectedMessage }) => {
         const result = validateKPP(kpp);
         expect(result.isValid).toBe(false);
-        // Для дефиса длина становится 10, так что сообщение о длине
-        if (kpp.includes("-")) {
-          expect(result.errorMessage).toBe("КПП должен содержать 9 знаков");
-        } else {
-          expect(result.errorMessage).toBe("Неверный формат КПП");
-        }
+        expect(result.errorMessage).toBe(expectedMessage);
       },
     );
+
+    // И тест для PP=00 должен проходить:
+    test("должен отклонять недопустимые коды PP", () => {
+      const result = validateKPP("770100001"); // PP = 00
+      expect(result.isValid).toBe(false);
+      expect(result.errorMessage).toBe(
+        "Неверный код причины постановки на учет",
+      );
+    });
   });
 
   // ========== ТЕСТЫ НА ПРИЧИНУ ПОСТАНОВКИ (PP) ==========
