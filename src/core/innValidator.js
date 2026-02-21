@@ -254,31 +254,49 @@ export const validateKPP = (kpp) => {
     return { isValid: false, errorMessage: "КПП должен содержать 9 знаков" };
   }
 
-  // Проверка формата: NNNN PP XXX, где PP может быть цифрой или буквой
-  const kppRegex = /^\d{4}[0-9A-Z]{2}\d{3}$/;
-  if (!kppRegex.test(strKpp)) {
-    return { isValid: false, errorMessage: "Неверный формат КПП" };
-  }
+  // УЛУЧШЕННАЯ проверка формата
+  const firstPart = strKpp.substring(0, 4); // NNNN - только цифры
+  const secondPart = strKpp.substring(4, 6); // PP - цифры или буквы
+  const thirdPart = strKpp.substring(6, 9); // XXX - только цифры
 
-  // Проверка причины постановки (PP)
-  const pp = strKpp.substring(4, 6);
-  const ppNum = parseInt(pp, 10);
-
-  // Для российских: 01-50, для иностранных: 50-99
-  if (ppNum === 0 || (ppNum >= 1 && ppNum <= 50)) {
-    // Российская организация (включая 00)
-  } else if (ppNum >= 50 && ppNum <= 99) {
-    // Иностранная организация
-  } else if (isNaN(ppNum)) {
-    // Если не число - возможно буквенный код (допустимо для некоторых случаев)
-  } else {
+  // Проверка первой части (только цифры)
+  if (!/^\d{4}$/.test(firstPart)) {
     return {
       isValid: false,
-      errorMessage: "Неверный код причины постановки на учет",
+      errorMessage: "Первые 4 символа должны быть цифрами",
     };
   }
 
-  return { isValid: true, errorMessage: "" };
+  // Проверка второй части (цифры или буквы A-Z)
+  if (!/^[0-9A-Z]{2}$/.test(secondPart)) {
+    return { isValid: false, errorMessage: "Неверный формат КПП" };
+  }
+
+  // Проверка третьей части (только цифры)
+  if (!/^\d{3}$/.test(thirdPart)) {
+    return {
+      isValid: false,
+      errorMessage: "Последние 3 символа должны быть цифрами",
+    };
+  }
+
+  // Проверка причины постановки (PP) - теперь с поддержкой 00
+  const ppNum = parseInt(secondPart, 10);
+
+  // Если PP - это буквы, то всегда валидно
+  if (isNaN(ppNum)) {
+    return { isValid: true, errorMessage: "" };
+  }
+
+  // Если PP - цифры, проверяем диапазон
+  if (ppNum === 0 || (ppNum >= 1 && ppNum <= 99)) {
+    return { isValid: true, errorMessage: "" };
+  }
+
+  return {
+    isValid: false,
+    errorMessage: "Неверный код причины постановки на учет",
+  };
 };
 
 /**
