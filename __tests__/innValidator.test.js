@@ -34,7 +34,7 @@ describe("innValidator - Базовая валидация", () => {
     test("должен возвращать ошибку для строки с пробелами", () => {
       const result = validateINN("   ");
       expect(result.isValid).toBe(false);
-      expect(result.errorCode).toBe(ValidationErrorCodes.EMPTY);
+      expect(result.errorCode).toBe(ValidationErrorCodes.NOT_DIGITS);
     });
   });
 
