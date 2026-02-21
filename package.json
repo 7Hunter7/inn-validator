@@ -1,0 +1,55 @@
+
+{
+  "name": "inn-validator",
+  "version": "1.0.0",
+  "description": "Профессиональная валидация ИНН и КПП согласно официальным требованиям ФНС РФ. Поддержка новых правил на 2026 год. Поддержка TypeScript.",
+  "main": "src/index.js",
+  "module": "src/index.js",
+  "browser": "src/index.js",
+  "types": "index.d.ts",
+  "files": [
+    "src",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "test": "echo \"No tests in production\" && exit 0"
+  },
+  "keywords": [
+    "inn",
+    "kpp",
+    "validator",
+    "russian",
+    "fns",
+    "inn-validator",
+    "russia",
+    "validation",
+    "inn-rf",
+    "tax",
+    "tax-id",
+    "russian-tax",
+    "inn-check",
+    "vue",
+    "vuejs"
+  ],
+  "author": {
+    "name": "Ivan Kalugin",
+    "email": "i.am.hunter.777.ih@gmail.com",
+    "url": "https://github.com/7Hunter7"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/7Hunter7/inn-validator.git"
+  },
+  "bugs": {
+    "url": "https://github.com/7Hunter7/inn-validator/issues"
+  },
+  "homepage": "https://github.com/7Hunter7/inn-validator#readme",
+  "peerDependencies": {
+    "vue": "^2.6.0 || ^3.0.0"
+  },
+  "engines": {
+    "node": ">=12.0.0"
+  }
+}
