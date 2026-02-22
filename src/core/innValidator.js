@@ -255,15 +255,17 @@ export const validateINN = (inn, options = {}) => {
  */
 export const validateKPP = (kpp) => {
   if (!kpp) return { isValid: false, errorMessage: "КПП не может быть пустым" };
-
   const strKpp = String(kpp).trim();
 
   // Проверка длины
   if (strKpp.length !== 9) {
     return { isValid: false, errorMessage: "КПП должен содержать 9 знаков" };
   }
-
-  // УЛУЧШЕННАЯ проверка формата
+  // Специальный случай для межрегиональных инспекций (код 9909)
+  if (firstPart === "9909" && secondPart === "00" && /^\d{3}$/.test(thirdPart)) {
+    return { isValid: true, errorMessage: "" };
+  }
+  // Проверка формата
   const firstPart = strKpp.substring(0, 4); // NNNN - только цифры
   const secondPart = strKpp.substring(4, 6); // PP - цифры или буквы
   const thirdPart = strKpp.substring(6, 9); // XXX - только цифры
