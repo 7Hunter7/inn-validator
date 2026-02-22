@@ -1,6 +1,6 @@
 {
   "name": "inn-validator",
-  "version": "1.0.1",
+  "version": "1.1.0",
   "description": "Профессиональная валидация ИНН и КПП согласно официальным требованиям ФНС РФ. Поддержка новых правил на 2026 год. Поддержка TypeScript.",
   "main": "src/index.js",
   "module": "src/index.js",
