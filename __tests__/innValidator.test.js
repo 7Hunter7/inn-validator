@@ -24,7 +24,7 @@ const validLegalINNs = [
   "7763864594",
   "9791945217"
 ];
-//Некорректные ИНН (для негативных тестов)
+// Некорректные ИНН (для негативных тестов)
 const invalidINNs = [
   { inn: "639116743111", error: "неправильное КЧ (физлицо)" },
   { inn: "9572907989",   error: "неправильное КЧ (юрлицо)" }
@@ -97,30 +97,39 @@ describe("innValidator - Базовая валидация", () => {
       expect(result.errorCode).toBe(ValidationErrorCodes.INVALID_LENGTH);
       expect(result.details.length).toBe(13);
     });
-
-    test("должен принимать 10-значный ИНН", () => {
-      const result = validateINN("7707083893", { validateStructure: false });
-      expect(result.isValid).toBe(true);
-      expect(result.details.type).toBe("organization");
-    });
-    test("должен принимать валидный 12-значный ИНН", () => {
-      // Используtv проверенные ИНН
-      const validINNs = ["772855555590", "500100732259"];
-
-      validINNs.forEach((inn) => {
-        const result = validateINN(inn, { validateStructure: false });
-        expect(result.isValid).toBe(true);
-        expect(result.details.type).toBe("individual");
-      });
-    });
-
-    test("должен отклонять невалидный 12-значный ИНН", () => {
-      const invalidINN = "123456789047"; // Заведомо невалидный
-      const result = validateINN(invalidINN, { validateStructure: false });
-      expect(result.isValid).toBe(false);
-      expect(result.errorCode).toBe(ValidationErrorCodes.INVALID_CHECKSUM);
-    });
   });
+
+  describe('Проверка 12-значных ИНН (физические лица)', () => {
+  test.each(validIndividualINNs)("должен принимать валидный ИНН Физ.лица", (inn) => {
+    const result = validateINN(inn, { validateStructure: false });
+    expect(result.isValid).toBe(true);
+    expect(result.details.type).toBe("individual");
+    expect(result.errorMessage).toBe("");
+  });
+
+  test("должен отклонять невалидный 12-значный ИНН", () => {
+    const invalidINN = "639116743111"; // На 1 отличается от валидного
+    const result = validateINN(invalidINN, { validateStructure: false });
+    expect(result.isValid).toBe(false);
+    expect(result.errorCode).toBe(ValidationErrorCodes.INVALID_CHECKSUM);
+  });
+});
+
+describe('Проверка 10-значных ИНН (юридические лица)', () => {
+  test.each(validLegalINNs)("должен принимать валидный ИНН Юр.лица", (inn) => {
+    const result = validateINN(inn, { validateStructure: false });
+    expect(result.isValid).toBe(true);
+    expect(result.details.type).toBe("organization");
+    expect(result.errorMessage).toBe("");
+  });
+
+  test("должен отклонять невалидный 10-значный ИНН", () => {
+    const invalidINN = "9572907989"; // На 1 отличается от валидного
+    const result = validateINN(invalidINN, { validateStructure: false });
+    expect(result.isValid).toBe(false);
+    expect(result.errorCode).toBe(ValidationErrorCodes.INVALID_CHECKSUM);
+  });
+});
 
   // ========== ТЕСТЫ НА СТРУКТУРУ (NNYY) ==========
   describe("Проверка структуры NNYY", () => {
@@ -200,12 +209,6 @@ describe("innValidator - Базовая валидация", () => {
       const result = validateINN(inn, { validateStructure: false });
       expect(result.isValid).toBe(false);
       expect(result.errorCode).toBe(ValidationErrorCodes.INVALID_CHECKSUM);
-    });
-
-    test("должен правильно рассчитывать КЧ для 12-значного ИНН", () => {
-      // Пример валидного 12-значного ИНН (нужно найти реальный пример)
-      const result = validateINN("123456789047", { validateStructure: false });
-      expect(result.isValid).toBe(false); // пока false, замените на реальный
     });
   });
 
