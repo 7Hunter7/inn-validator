@@ -261,14 +261,15 @@ export const validateKPP = (kpp) => {
   if (strKpp.length !== 9) {
     return { isValid: false, errorMessage: "КПП должен содержать 9 знаков" };
   }
-  // Специальный случай для межрегиональных инспекций (код 9909)
-  if (firstPart === "9909" && secondPart === "00" && /^\d{3}$/.test(thirdPart)) {
-    return { isValid: true, errorMessage: "" };
-  }
   // Проверка формата
   const firstPart = strKpp.substring(0, 4); // NNNN - только цифры
   const secondPart = strKpp.substring(4, 6); // PP - цифры или буквы
   const thirdPart = strKpp.substring(6, 9); // XXX - только цифры
+
+  // Специальный случай для межрегиональных инспекций (код 9909)
+  if (firstPart === "9909" && secondPart === "00" && /^\d{3}$/.test(thirdPart)) {
+    return { isValid: true, errorMessage: "" };
+  }
 
   // Проверка первой части (только цифры)
   if (!/^\d{4}$/.test(firstPart)) {
@@ -290,7 +291,7 @@ export const validateKPP = (kpp) => {
   if (!/^[0-9A-Z]{2}$/.test(secondPart)) {
     return {
       isValid: false,
-      errorMessage: "Неверный формат КПП", // для PP=00
+      errorMessage: "Неверный формат КПП",
     };
   }
 
@@ -309,7 +310,7 @@ export const validateKPP = (kpp) => {
 
   return {
     isValid: false,
-    errorMessage: "Неверный код причины постановки на учет", // для PP=00
+    errorMessage: "Неверный код причины постановки на учет",
   };
 };
 
