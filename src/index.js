@@ -15,11 +15,11 @@ export {
 } from "./core/innValidator";
 
 // Vue миксины
-export { formValidationMixin } from "./vue/formValidationMixin";
-export { inputValidationMixin } from "./vue/inputValidationMixin";
+export { formValidationMixin } from "./mixins/formValidationMixin";
+export { inputValidationMixin } from "./mixins/inputValidationMixin";
 
 // Версия
-export const VERSION = "1.0.0";
+export const VERSION = "1.1.1";
 
 // Плагин для Vue
 export default {
