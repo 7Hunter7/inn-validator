@@ -172,8 +172,7 @@ export const inputValidationMixin = {
      * @param {Event} event
      */
     onBlur(event) {
-      this.inputState.isTouched = true;
-
+      this.markAsTouched();
       // При потере фокуса всегда валидируем
       this.validate(event.target.value);
 
@@ -188,6 +187,12 @@ export const inputValidationMixin = {
       this.$emit("focus", event);
     },
 
+    /**
+     * Отмечает поле как touched
+    */
+    markAsTouched() {
+      this.inputState.isTouched = true;
+    },
     /**
      * Очистка поля
      */
